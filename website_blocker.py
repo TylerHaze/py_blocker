@@ -6,15 +6,25 @@ hosts_path = r"C:\Users\Tyler\Documents\hosts.txt"
 redirect = "127.0.0.1"
 website_list = ["www.facebook.com", "facebook.com", "www.reddit.com", "reddit.com"]
 
-today8am = now.replace(hour=9, minute=0, second=0, microsecond=0)
-today5pm = now.replace(hour=17, minute=0, second=0, microsecond=0)
+todayam = dt.now().replace(hour=9, minute=00, second=0, microsecond=0)
+todaypm = dt.now().replace(hour=17, minute=0, second=0, microsecond=0)
 
 while True:
     now = dt.now()
-    if today8am <= now <= today4pm:
+    if todayam <= now <= todaypm:
         with open(hosts_path, 'r+') as hostFile:
-            hostFile.write("hello")
-        time.sleep(300)
+            content = hostFile.read()
+            for website in website_list:
+                if website in content:
+                    pass
+                else:
+                    hostFile.write(redirect+" "+website+"\n")
     else:
-        print("not yet")
+        with open(hosts_path,'+r') as file:
+            content = file.readlines()
+            file.seek(0)
+            for line in content:
+                if not any(website in line for website in website_list):
+                    file.write(line)        
+            file.truncate() 
         time.sleep(5)
